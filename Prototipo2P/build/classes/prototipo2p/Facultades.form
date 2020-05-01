@@ -41,8 +41,8 @@
                               </Group>
                               <EmptySpace min="-2" pref="51" max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="0" attributes="0">
-                                  <Component id="txt_apellido" min="-2" pref="111" max="-2" attributes="0"/>
-                                  <Component id="txt_idempleado" min="-2" pref="111" max="-2" attributes="0"/>
+                                  <Component id="txt_estatus" min="-2" pref="111" max="-2" attributes="0"/>
+                                  <Component id="txt_codigo" min="-2" pref="111" max="-2" attributes="0"/>
                                   <Component id="txt_nombre" min="-2" pref="111" max="-2" attributes="0"/>
                               </Group>
                           </Group>
@@ -99,7 +99,7 @@
                   </Group>
                   <Group type="102" attributes="0">
                       <Group type="103" groupAlignment="3" attributes="0">
-                          <Component id="txt_idempleado" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="txt_codigo" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="jLabel2" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace type="separate" max="-2" attributes="0"/>
@@ -110,7 +110,7 @@
                       <EmptySpace type="separate" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">
                           <Component id="jLabel4" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="txt_apellido" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="txt_estatus" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
                   </Group>
               </Group>
@@ -143,9 +143,9 @@
         <Property name="text" type="java.lang.String" value="Nombre Facultad:"/>
       </Properties>
     </Component>
-    <Component class="javax.swing.JTextField" name="txt_idempleado">
+    <Component class="javax.swing.JTextField" name="txt_codigo">
       <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="txt_idempleadoActionPerformed"/>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="txt_codigoActionPerformed"/>
       </Events>
     </Component>
     <Component class="javax.swing.JLabel" name="lbl_estatus">
@@ -160,9 +160,9 @@
         <Property name="text" type="java.lang.String" value="Estatus Facultad:"/>
       </Properties>
     </Component>
-    <Component class="javax.swing.JTextField" name="txt_apellido">
+    <Component class="javax.swing.JTextField" name="txt_estatus">
       <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="txt_apellidoActionPerformed"/>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="txt_estatusActionPerformed"/>
       </Events>
     </Component>
     <Component class="javax.swing.JLabel" name="jLabel5">

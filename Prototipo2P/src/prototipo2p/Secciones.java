@@ -18,7 +18,9 @@ public class Secciones extends javax.swing.JInternalFrame {
      * Creates new form Empleados
      */
     
-    
+    String BD = "jdbc:mysql://localhost/siu";
+    String Usuario = "root";
+    String Clave = "admin";
     
     public Secciones() {
         initComponents();
@@ -203,19 +205,94 @@ public class Secciones extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_txt_estatusActionPerformed
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
-        
+//Codigo que permite consultar registros en la base de datos
+        try {
+            Connection cn = DriverManager.getConnection(BD, Usuario, Clave);
+            PreparedStatement pst = cn.prepareStatement("select * from secciones where codigo_seccion = ?");
+            pst.setString(1, txt_buscar.getText().trim());
+
+            ResultSet rs = pst.executeQuery();
+
+            if (rs.next()) {
+                txt_codigo.setText(rs.getString("codigo_seccion"));
+                txt_nombre.setText(rs.getString("nombre_seccion"));
+                txt_estatus.setText(rs.getString("estatus_seccion"));
+
+            } else {
+                JOptionPane.showMessageDialog(null, "Seccion no registrado.");
+            }
+
+        } catch (Exception e) {
+
+        }            
     }//GEN-LAST:event_jButton4ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-       
+//Codigo que permite insertar registros en al base de datos
+        try {
+            Connection cn = DriverManager.getConnection(BD, Usuario, Clave);
+            PreparedStatement pst = cn.prepareStatement("insert into secciones values(?,?,?)");
+
+            pst.setString(1, txt_codigo.getText().trim());
+            pst.setString(2, txt_nombre.getText().trim());
+            pst.setString(3, txt_estatus.getText().trim());
+            
+
+            pst.executeUpdate();
+
+            txt_codigo.setText("");
+            txt_nombre.setText("");
+            txt_estatus.setText("");
+
+            lbl_estatus.setText("Registro exitoso.");
+        } catch (Exception e) {
+
+        }              
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        
+//Codigo que permite modificar registros en la base de datos
+        try {
+            String ID = txt_buscar.getText().trim();
+
+            Connection cn = DriverManager.getConnection(BD, Usuario, Clave);
+            PreparedStatement pst = cn.prepareStatement("update secciones set codigo_seccion= ?, nombre_seccion=?, estatus_seccion=? where codigo_seccion = " + ID);
+
+            pst.setString(1, txt_codigo.getText().trim());
+            pst.setString(2, txt_nombre.getText().trim());
+            pst.setString(3, txt_estatus.getText().trim());
+            
+            pst.executeUpdate();
+
+            txt_codigo.setText("");
+            txt_nombre.setText("");
+            txt_estatus.setText("");
+
+            lbl_estatus.setText("Modificación Exitosa.");
+
+        } catch (Exception e) {
+        }                         
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-       
+//Codigo que permite borrar registros en la base de datos
+        try {
+
+            Connection cn = DriverManager.getConnection(BD, Usuario, Clave);
+            PreparedStatement pst = cn.prepareStatement("delete from secciones where codigo_seccion = ?");
+
+            pst.setString(1, txt_buscar.getText().trim());
+            pst.executeUpdate();
+
+            txt_codigo.setText("");
+            txt_nombre.setText("");
+            txt_estatus.setText("");
+            
+
+            lbl_estatus.setText("Registro Eliminado.");
+
+        } catch (Exception e) {
+        }                   
     }//GEN-LAST:event_jButton3ActionPerformed
 
 

@@ -17,8 +17,10 @@ public class Facultades extends javax.swing.JInternalFrame {
     /**
      * Creates new form Empleados
      */
-    
-   
+    String BD = "jdbc:mysql://localhost/siu";
+    String Usuario = "root";
+    String Clave = "admin";
+
     public Facultades() {
         initComponents();
     }
@@ -36,10 +38,10 @@ public class Facultades extends javax.swing.JInternalFrame {
         jLabel2 = new javax.swing.JLabel();
         txt_nombre = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
-        txt_idempleado = new javax.swing.JTextField();
+        txt_codigo = new javax.swing.JTextField();
         lbl_estatus = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
-        txt_apellido = new javax.swing.JTextField();
+        txt_estatus = new javax.swing.JTextField();
         jLabel5 = new javax.swing.JLabel();
         txt_buscar = new javax.swing.JTextField();
         jButton4 = new javax.swing.JButton();
@@ -64,9 +66,9 @@ public class Facultades extends javax.swing.JInternalFrame {
 
         jLabel3.setText("Nombre Facultad:");
 
-        txt_idempleado.addActionListener(new java.awt.event.ActionListener() {
+        txt_codigo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txt_idempleadoActionPerformed(evt);
+                txt_codigoActionPerformed(evt);
             }
         });
 
@@ -74,9 +76,9 @@ public class Facultades extends javax.swing.JInternalFrame {
 
         jLabel4.setText("Estatus Facultad:");
 
-        txt_apellido.addActionListener(new java.awt.event.ActionListener() {
+        txt_estatus.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txt_apellidoActionPerformed(evt);
+                txt_estatusActionPerformed(evt);
             }
         });
 
@@ -129,8 +131,8 @@ public class Facultades extends javax.swing.JInternalFrame {
                                     .addComponent(jLabel4))
                                 .addGap(51, 51, 51)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(txt_apellido, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(txt_idempleado, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(txt_estatus, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(txt_codigo, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(txt_nombre, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE))))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 46, Short.MAX_VALUE)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -173,7 +175,7 @@ public class Facultades extends javax.swing.JInternalFrame {
                         .addComponent(lbl_estatus, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(txt_idempleado, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txt_codigo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel2))
                         .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -182,7 +184,7 @@ public class Facultades extends javax.swing.JInternalFrame {
                         .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel4)
-                            .addComponent(txt_apellido, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addComponent(txt_estatus, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addContainerGap(46, Short.MAX_VALUE))
         );
 
@@ -193,28 +195,104 @@ public class Facultades extends javax.swing.JInternalFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_txt_nombreActionPerformed
 
-    private void txt_idempleadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txt_idempleadoActionPerformed
+    private void txt_codigoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txt_codigoActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_txt_idempleadoActionPerformed
+    }//GEN-LAST:event_txt_codigoActionPerformed
 
-    private void txt_apellidoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txt_apellidoActionPerformed
+    private void txt_estatusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txt_estatusActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_txt_apellidoActionPerformed
+    }//GEN-LAST:event_txt_estatusActionPerformed
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
-        
+//Codigo que permite consultar registros en la base de datos
+        try {
+            Connection cn = DriverManager.getConnection(BD, Usuario, Clave);
+            PreparedStatement pst = cn.prepareStatement("select * from facultades where codigo_facultad = ?");
+            pst.setString(1, txt_buscar.getText().trim());
+
+            ResultSet rs = pst.executeQuery();
+
+            if (rs.next()) {
+                txt_codigo.setText(rs.getString("codigo_facultad"));
+                txt_nombre.setText(rs.getString("nombre_facultad"));
+                txt_estatus.setText(rs.getString("estatus_facultad"));
+                //txt_direccion.setText(rs.getString("Direccion"));
+
+            } else {
+                JOptionPane.showMessageDialog(null, "Facultad no registrado.");
+            }
+
+        } catch (Exception e) {
+
+        }
+
     }//GEN-LAST:event_jButton4ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-       
+        //Codigo que permite insertar registros en al base de datos
+        try {
+            Connection cn = DriverManager.getConnection(BD, Usuario, Clave);
+            PreparedStatement pst = cn.prepareStatement("insert into facultades values(?,?,?)");
+
+            pst.setString(1, txt_codigo.getText().trim());
+            pst.setString(2, txt_nombre.getText().trim());
+            pst.setString(3, txt_estatus.getText().trim());
+
+            pst.executeUpdate();
+
+            txt_codigo.setText("");
+            txt_nombre.setText("");
+            txt_estatus.setText("");
+
+            lbl_estatus.setText("Registro exitoso.");
+        } catch (Exception e) {
+
+        }
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        
+        //Codigo que permite modificar registros en la base de datos
+        try {
+            String ID = txt_buscar.getText().trim();
+
+            Connection cn = DriverManager.getConnection(BD, Usuario, Clave);
+            PreparedStatement pst = cn.prepareStatement("update facultades set codigo_facultad = ?, nombre_facultad=?, estatus_facultad=? where codigo_facultad = " + ID);
+
+            pst.setString(1, txt_codigo.getText().trim());
+            pst.setString(2, txt_nombre.getText().trim());
+            pst.setString(3, txt_estatus.getText().trim());
+
+            pst.executeUpdate();
+
+            txt_codigo.setText("");
+            txt_nombre.setText("");
+            txt_estatus.setText("");
+
+            lbl_estatus.setText("Modificación Exitosa.");
+
+        } catch (Exception e) {
+        }
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-       
+//Codigo que permite borrar registros en la base de datos
+        try {
+
+            Connection cn = DriverManager.getConnection(BD, Usuario, Clave);
+            PreparedStatement pst = cn.prepareStatement("delete from facultades where codigo_facultad = ?");
+
+            pst.setString(1, txt_buscar.getText().trim());
+            pst.executeUpdate();
+
+            txt_codigo.setText("");
+            txt_nombre.setText("");
+            txt_estatus.setText("");
+            
+
+            lbl_estatus.setText("Registro Eliminado.");
+
+        } catch (Exception e) {
+        }
     }//GEN-LAST:event_jButton3ActionPerformed
 
 
@@ -229,9 +307,9 @@ public class Facultades extends javax.swing.JInternalFrame {
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel lbl_estatus;
-    private javax.swing.JTextField txt_apellido;
     private javax.swing.JTextField txt_buscar;
-    private javax.swing.JTextField txt_idempleado;
+    private javax.swing.JTextField txt_codigo;
+    private javax.swing.JTextField txt_estatus;
     private javax.swing.JTextField txt_nombre;
     // End of variables declaration//GEN-END:variables
 }

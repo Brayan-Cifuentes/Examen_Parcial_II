@@ -18,7 +18,9 @@ public class Asignacion_cursos_maestros extends javax.swing.JInternalFrame {
      * Creates new form Empleados
      */
     
-    
+    String BD = "jdbc:mysql://localhost/siu";
+    String Usuario = "root";
+    String Clave = "admin";
     
     public Asignacion_cursos_maestros() {
         initComponents();
@@ -89,7 +91,7 @@ public class Asignacion_cursos_maestros extends javax.swing.JInternalFrame {
             }
         });
 
-        jLabel5.setText("Ingresa el código de Asignacion: ");
+        jLabel5.setText("Ingresa el código de Carrera: ");
 
         jButton4.setText("Buscar");
         jButton4.addActionListener(new java.awt.event.ActionListener() {
@@ -186,7 +188,7 @@ public class Asignacion_cursos_maestros extends javax.swing.JInternalFrame {
                                     .addComponent(txt_aula, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(txt_codigoseccion, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE)))
                             .addComponent(txt_codigosede, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 45, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 61, Short.MAX_VALUE)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(jButton1)
@@ -228,13 +230,13 @@ public class Asignacion_cursos_maestros extends javax.swing.JInternalFrame {
                         .addGap(17, 17, 17)
                         .addComponent(lbl_estatus, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(txt_codigocarrera, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(txt_codigocarrera, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel2))
                         .addGap(18, 18, 18)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel3)
-                            .addComponent(txt_codigosede, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(txt_codigosede, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel3))
                         .addGap(18, 18, 18)
                         .addComponent(jLabel4)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -272,19 +274,119 @@ public class Asignacion_cursos_maestros extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_txt_codigojornadaActionPerformed
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
-        
+//Codigo que permite consultar registros en la base de datos
+        try {
+            Connection cn = DriverManager.getConnection(BD, Usuario, Clave);
+            PreparedStatement pst = cn.prepareStatement("select * from asignacioncursosmastros where codigo_carrera = ?");
+            pst.setString(1, txt_buscar.getText().trim());
+
+            ResultSet rs = pst.executeQuery();
+
+            if (rs.next()) {
+                txt_codigocarrera.setText(rs.getString("codigo_carrera"));
+                txt_codigosede.setText(rs.getString("codigo_sede"));
+                txt_codigojornada.setText(rs.getString("codigo_jornada"));
+                txt_codigoseccion.setText(rs.getString("codigo_seccion"));
+                txt_aula.setText(rs.getString("codigo_aula"));
+                txt_curso.setText(rs.getString("codigo_curso"));
+                txt_codigomaestro.setText(rs.getString("codigo_maestro"));
+
+            } else {
+                JOptionPane.showMessageDialog(null, "Maestro no registrado.");
+            }
+
+        } catch (Exception e) {
+
+        }                         
     }//GEN-LAST:event_jButton4ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-       
+//Codigo que permite insertar registros en al base de datos
+        try {
+            Connection cn = DriverManager.getConnection(BD, Usuario, Clave);
+            PreparedStatement pst = cn.prepareStatement("insert into asignacioncursosmastros values(?,?,?,?,?,?,?)");
+
+            pst.setString(1, txt_codigocarrera.getText().trim());
+            pst.setString(2, txt_codigosede.getText().trim());
+            pst.setString(3, txt_codigojornada.getText().trim());
+            pst.setString(4, txt_codigoseccion.getText().trim());
+            pst.setString(5, txt_aula.getText().trim());
+            pst.setString(6, txt_curso.getText().trim());
+            pst.setString(7, txt_codigomaestro.getText().trim());
+
+            
+            pst.executeUpdate();
+
+            txt_codigocarrera.setText("");
+            txt_codigosede.setText("");
+            txt_codigojornada.setText("");
+            txt_codigoseccion.setText("");
+            txt_aula.setText("");
+            txt_curso.setText("");
+            txt_codigomaestro.setText("");
+
+                        
+            lbl_estatus.setText("Registro exitoso.");
+        } catch (Exception e) {
+
+        }                  
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        
+//Codigo que permite modificar registros en la base de datos
+        try {
+            String ID = txt_buscar.getText().trim();
+
+            Connection cn = DriverManager.getConnection(BD, Usuario, Clave);
+            PreparedStatement pst = cn.prepareStatement("update asignacioncursosmastros set codigo_carrera= ?, codigo_sede=?, codigo_jornada=?, codigo_seccion=?, codigo_aula=?, codigo_curso=?, codigo_maestro=? where codigo_carrera = " + ID);
+
+            pst.setString(1, txt_codigocarrera.getText().trim());
+            pst.setString(2, txt_codigosede.getText().trim());
+            pst.setString(3, txt_codigojornada.getText().trim());
+            pst.setString(4, txt_codigoseccion.getText().trim());
+            pst.setString(5, txt_aula.getText().trim());
+            pst.setString(6, txt_curso.getText().trim());
+            pst.setString(7, txt_codigomaestro.getText().trim());
+   
+            pst.executeUpdate();
+
+            txt_codigocarrera.setText("");
+            txt_codigosede.setText("");
+            txt_codigojornada.setText("");
+            txt_codigoseccion.setText("");
+            txt_aula.setText("");
+            txt_curso.setText("");
+            txt_codigomaestro.setText("");
+
+            lbl_estatus.setText("Modificación Exitosa.");
+
+        } catch (Exception e) {
+        }                             
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-       
+//Codigo que permite borrar registros en la base de datos
+        try {
+
+            Connection cn = DriverManager.getConnection(BD, Usuario, Clave);
+            PreparedStatement pst = cn.prepareStatement("delete from asignacioncursosmastros where codigo_carrera = ?");
+
+            pst.setString(1, txt_buscar.getText().trim());
+            pst.executeUpdate();
+
+            txt_codigocarrera.setText("");
+            txt_codigosede.setText("");
+            txt_codigojornada.setText("");
+            txt_codigoseccion.setText("");
+            txt_aula.setText("");
+            txt_curso.setText("");
+            txt_codigomaestro.setText("");
+            
+
+            lbl_estatus.setText("Registro Eliminado.");
+
+        } catch (Exception e) {
+        }                   
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void txt_codigoseccionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txt_codigoseccionActionPerformed

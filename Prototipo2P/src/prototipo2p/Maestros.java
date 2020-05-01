@@ -18,7 +18,9 @@ public class Maestros extends javax.swing.JInternalFrame {
      * Creates new form Empleados
      */
     
-    
+    String BD = "jdbc:mysql://localhost/siu";
+    String Usuario = "root";
+    String Clave = "admin";
     
     public Maestros() {
         initComponents();
@@ -52,7 +54,7 @@ public class Maestros extends javax.swing.JInternalFrame {
         jLabel7 = new javax.swing.JLabel();
         txt_email = new javax.swing.JTextField();
         jLabel8 = new javax.swing.JLabel();
-        txt_alumno = new javax.swing.JTextField();
+        txt_estatusmaes = new javax.swing.JTextField();
 
         setClosable(true);
         setIconifiable(true);
@@ -135,9 +137,9 @@ public class Maestros extends javax.swing.JInternalFrame {
 
         jLabel8.setText("Estatus Maestro:");
 
-        txt_alumno.addActionListener(new java.awt.event.ActionListener() {
+        txt_estatusmaes.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txt_alumnoActionPerformed(evt);
+                txt_estatusmaesActionPerformed(evt);
             }
         });
 
@@ -172,7 +174,7 @@ public class Maestros extends javax.swing.JInternalFrame {
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                                 .addComponent(jLabel8)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(txt_alumno, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addComponent(txt_estatusmaes, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 51, Short.MAX_VALUE)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
@@ -234,7 +236,7 @@ public class Maestros extends javax.swing.JInternalFrame {
                             .addComponent(jLabel7))))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(txt_alumno, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txt_estatusmaes, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel8))
                 .addContainerGap(60, Short.MAX_VALUE))
         );
@@ -255,19 +257,111 @@ public class Maestros extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_txt_direccionActionPerformed
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
-        
+//Codigo que permite consultar registros en la base de datos
+        try {
+            Connection cn = DriverManager.getConnection(BD, Usuario, Clave);
+            PreparedStatement pst = cn.prepareStatement("select * from maestros where codigo_maestro = ?");
+            pst.setString(1, txt_buscar.getText().trim());
+
+            ResultSet rs = pst.executeQuery();
+
+            if (rs.next()) {
+                txt_codigo.setText(rs.getString("codigo_maestro"));
+                txt_nombre.setText(rs.getString("nombre_maestro"));
+                txt_direccion.setText(rs.getString("direccion_maestro"));
+                txt_telefono.setText(rs.getString("telefono_maetro"));
+                txt_email.setText(rs.getString("email_maestro"));
+                txt_estatusmaes.setText(rs.getString("estatus_maestro"));
+
+            } else {
+                JOptionPane.showMessageDialog(null, "Maestro no registrado.");
+            }
+
+        } catch (Exception e) {
+
+        }                       
     }//GEN-LAST:event_jButton4ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-       
+//Codigo que permite insertar registros en al base de datos
+        try {
+            Connection cn = DriverManager.getConnection(BD, Usuario, Clave);
+            PreparedStatement pst = cn.prepareStatement("insert into maestros values(?,?,?,?,?,?)");
+
+            pst.setString(1, txt_codigo.getText().trim());
+            pst.setString(2, txt_nombre.getText().trim());
+            pst.setString(3, txt_direccion.getText().trim());
+            pst.setString(4, txt_telefono.getText().trim());
+            pst.setString(5, txt_email.getText().trim());
+            pst.setString(6, txt_estatusmaes.getText().trim());
+            
+            pst.executeUpdate();
+
+            txt_codigo.setText("");
+            txt_nombre.setText("");
+            txt_direccion.setText("");
+            txt_telefono.setText("");
+            txt_email.setText("");
+            txt_estatusmaes.setText("");
+
+            lbl_estatus.setText("Registro exitoso.");
+        } catch (Exception e) {
+
+        }           
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        
+//Codigo que permite modificar registros en la base de datos
+        try {
+            String ID = txt_buscar.getText().trim();
+
+            Connection cn = DriverManager.getConnection(BD, Usuario, Clave);
+            PreparedStatement pst = cn.prepareStatement("update maestros set codigo_maestro= ?, nombre_maestro=?, direccion_maestro=?, telefono_maetro=?, email_maestro=?, estatus_maestro=? where codigo_maestro = " + ID);
+
+            pst.setString(1, txt_codigo.getText().trim());
+            pst.setString(2, txt_nombre.getText().trim());
+            pst.setString(3, txt_direccion.getText().trim());
+            pst.setString(4, txt_telefono.getText().trim());
+            pst.setString(5, txt_email.getText().trim());
+            pst.setString(6, txt_estatusmaes.getText().trim());
+            
+            pst.executeUpdate();
+
+            txt_codigo.setText("");
+            txt_nombre.setText("");
+            txt_direccion.setText("");
+            txt_telefono.setText("");
+            txt_email.setText("");
+            txt_estatusmaes.setText("");
+
+            lbl_estatus.setText("Modificación Exitosa.");
+
+        } catch (Exception e) {
+        }                     
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-       
+//Codigo que permite borrar registros en la base de datos
+        try {
+
+            Connection cn = DriverManager.getConnection(BD, Usuario, Clave);
+            PreparedStatement pst = cn.prepareStatement("delete from maestros where codigo_maestro = ?");
+
+            pst.setString(1, txt_buscar.getText().trim());
+            pst.executeUpdate();
+
+           txt_codigo.setText("");
+            txt_nombre.setText("");
+            txt_direccion.setText("");
+            txt_telefono.setText("");
+            txt_email.setText("");
+            txt_estatusmaes.setText("");
+            
+
+            lbl_estatus.setText("Registro Eliminado.");
+
+        } catch (Exception e) {
+        }                    
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void txt_telefonoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txt_telefonoActionPerformed
@@ -278,9 +372,9 @@ public class Maestros extends javax.swing.JInternalFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_txt_emailActionPerformed
 
-    private void txt_alumnoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txt_alumnoActionPerformed
+    private void txt_estatusmaesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txt_estatusmaesActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_txt_alumnoActionPerformed
+    }//GEN-LAST:event_txt_estatusmaesActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -297,11 +391,11 @@ public class Maestros extends javax.swing.JInternalFrame {
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel lbl_estatus;
-    private javax.swing.JTextField txt_alumno;
     private javax.swing.JTextField txt_buscar;
     private javax.swing.JTextField txt_codigo;
     private javax.swing.JTextField txt_direccion;
     private javax.swing.JTextField txt_email;
+    private javax.swing.JTextField txt_estatusmaes;
     private javax.swing.JTextField txt_nombre;
     private javax.swing.JTextField txt_telefono;
     // End of variables declaration//GEN-END:variables
