@@ -1,5 +1,7 @@
 package prototipo2p;
 
+import java.io.IOException;
+
 
 
 /*
@@ -185,7 +187,7 @@ public class Inicio extends javax.swing.JFrame {
 
         jMenu4.setText("Informes");
 
-        jMenuItem4.setText("Salir del Sistema");
+        jMenuItem4.setText("Consultas");
         jMenuItem4.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jMenuItem4ActionPerformed(evt);
@@ -197,7 +199,7 @@ public class Inicio extends javax.swing.JFrame {
 
         jMenu5.setText("Herramientas");
 
-        jMenuItem5.setText("Salir del Sistema");
+        jMenuItem5.setText("Calculadora");
         jMenuItem5.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jMenuItem5ActionPerformed(evt);
@@ -209,7 +211,7 @@ public class Inicio extends javax.swing.JFrame {
 
         jMenu6.setText("Ayuda");
 
-        jMenuItem6.setText("Salir del Sistema");
+        jMenuItem6.setText("Consultar");
         jMenuItem6.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jMenuItem6ActionPerformed(evt);
@@ -268,6 +270,20 @@ public class Inicio extends javax.swing.JFrame {
 
     private void jMenuItem5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem5ActionPerformed
         // TODO add your handling code here:
+        try        
+    {
+        Runtime rt = Runtime.getRuntime();           
+        Process p = rt.exec("calc");            
+        p.waitFor();        
+    }        
+    catch ( IOException ioe )       
+    {            
+        ioe.printStackTrace();
+    }         
+    catch ( InterruptedException ie )
+    {            
+        ie.printStackTrace();     
+    }
     }//GEN-LAST:event_jMenuItem5ActionPerformed
 
     private void jMenuItem6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem6ActionPerformed
